@@ -10,7 +10,7 @@ def index():
 	r  = requests.get("https://www.ptv.vic.gov.au/live-travel-updates/")
 	data = r.text
 	soup = BeautifulSoup(data)
-	final_string = "*Current status of PTV lines:* \n"
+	final_string = "*Current status of Victorian train lines:* \n"
 	for div in soup.find_all('div', class_='LineInfo'):
 			line = div.find('div', class_='titleHolder')
 			status = div.find('span', class_='bubbleType')
