@@ -19,9 +19,9 @@ def index():
 			if ((line == None) or (status == None)):
 				continue
 
-			final_string += div.find('div', class_='titleHolder').text + " | "
+			final_string += "*" +div.find('div', class_='titleHolder').text + "* | "
 			if "Good" in status.text:
-				final_string += ":geen_heart:"
+				final_string += ":green_heart:"
 			elif "Major" in status.text:
 				final_string += ":red_circle:"
 			elif "Minor" in status.text:
