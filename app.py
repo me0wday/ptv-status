@@ -33,7 +33,7 @@ def index():
 					elif "Minor" in status.text:
 						final_string += ":large_orange_diamond: "
 					elif "Part" in status.text:
-						final_string += ":black_large_square: "
+						final_string += ":black_circle: "
 
 					final_string += div.find('span', class_='bubbleType').text
 
