@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import os
-from flask import Flask
+from flask import Flask, import request
 app = Flask(__name__)
 
 import requests
