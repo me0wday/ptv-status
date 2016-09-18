@@ -16,7 +16,10 @@ def index():
 
 			data = r.text
 			soup = BeautifulSoup(data)
-			final_string = "*Current status of Victorian train lines:* \n"
+			if (request.args.get('slackpost') == "bot"):
+				final_string = ""
+			else:	
+				final_string = "*Current status of Victorian train lines:* \n"
 			for div in soup.find_all('div', class_='LineInfo'):
 					line = div.find('div', class_='titleHolder')
 					status = div.find('span', class_='bubbleType')
