@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-def get_ptv_status()
+def get_ptv_status():
 	try:
 		r  = requests.get("https://www.ptv.vic.gov.au/live-travel-updates/")
 
