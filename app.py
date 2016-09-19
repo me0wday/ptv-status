@@ -16,7 +16,7 @@ def index():
 		return "Error"
 
 @app.route('/hook')
-def index():
+def hook():
 	if (request.args.get('token') == os.environ.get('token')):
 		status = get_ptv_status()
 		slack.notify(text=status)
