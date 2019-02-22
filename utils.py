@@ -1,43 +1,46 @@
 from bs4 import BeautifulSoup
 import requests
+import json
 
 def get_ptv_status():
+	final_string = "*Current status of Victorian train lines:* \n"
 	try:
-		r  = requests.get("https://www.ptv.vic.gov.au/live-travel-updates/")
-
+		r  = requests.get("https://www.ptv.vic.gov.au/plan/disruptions/")
 		if not r.status_code // 100 == 2:
-			return "Error: Unexpected response"
-
+				return "Error: Unexpected response"
 		data = r.text
-		soup = BeautifulSoup(data)
-		final_string = "*Current status of Victorian train lines:* \n"
-		for div in soup.find_all('div', class_='LineInfo'):
-				line = div.find('div', class_='titleHolder')
-				status = div.find('span', class_='bubbleType')
-				more_info = soup.find(id=('article-' + div.get('data-id')))
+		soup = BeautifulSoup(data, features="html.parser")
+		test = soup.find("input", {"id": "fetch-key"})
+		route_req = requests.get(u"https://www.ptv.vic.gov.au/lithe/routes?__tok=" + test.get('value'))
+		routes = route_req.json()["routes"]
+		dis_req = requests.get(u"https://www.ptv.vic.gov.au/lithe/disruptions?__tok=" + test.get('value'))
+		disruptions = dis_req.json()["disruptions"]
+		disruption_text = ""
+		for line in routes:
+			has_fault = True
+			if line["route_type"] == 0:
+				for disruption in disruptions:
+					if disruption["display_status"] and disruption["route_ids"]:
+						for id in disruption["route_ids"]:
+							if id == line["id"]:
+								if has_fault:
+									kind = disruption["kind"]
+									if "Good" in kind:
+										final_string += ":green_heart: "
+									elif "Major" in kind:
+										final_string += ":red_circle: "
+									elif "Minor" in kind:
+										final_string += ":large_orange_diamond: "
+									elif "Part" in kind:
+										final_string += ":black_circle: "
+									elif "Planned Works" in kind:
+										final_string += ":construction: "
+									final_string += "*" + line["short_label"] + "*" + "\n"
+								final_string += "Disruption: " + disruption["label"] + "\n"
+								has_fault = False
 
-				if ((line == None) or (status == None)):
-					continue
-
-				final_string += "*" +div.find('div', class_='titleHolder').text + "* | "
-				if "Good" in status.text:
-					final_string += ":green_heart: "
-				elif "Major" in status.text:
-					final_string += ":red_circle: "
-				elif "Minor" in status.text:
-					final_string += ":large_orange_diamond: "
-				elif "Part" in status.text:
-					final_string += ":black_circle: "
-				elif "Planned Works" in status.text:
-					final_string += ":construction: "
-
-				final_string += div.find('span', class_='bubbleType').text
-
-				if not (more_info == None):
-					final_string += " | " + soup.find(id=('article-' + div.get('data-id'))).text + "\n"
-				else:
-					final_string += "\n"
-		return final_string
 	except requests.exceptions.RequestException as e:
 		#return "Error: {}".format(e)
 		return "Error"
+
+	return final_string
