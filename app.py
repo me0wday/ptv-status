@@ -1,7 +1,7 @@
 import os
 import slackweb
 from flask import Flask, request
-from utils import get_ptv_status
+from utils import get_ptv_status, get_ptv_status_html
 app = Flask(__name__)
 slack = slackweb.Slack(url=os.environ.get('slackhook'))
 
