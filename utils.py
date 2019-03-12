@@ -16,6 +16,7 @@ def get_ptv_status():
 		dis_req = requests.get(u"https://www.ptv.vic.gov.au/lithe/disruptions?__tok=" + test.get('value'))
 		disruptions = dis_req.json()["disruptions"]
 		disruption_text = ""
+		counter = 0
 		for line in routes:
 			has_fault = True
 			if line["route_type"] == 0:
@@ -23,6 +24,7 @@ def get_ptv_status():
 					if disruption["display_status"] and disruption["route_ids"]:
 						for id in disruption["route_ids"]:
 							if id == line["id"]:
+								counter += 1
 								if has_fault:
 									kind = disruption["kind"]
 									if "Good" in kind:
@@ -38,6 +40,8 @@ def get_ptv_status():
 									final_string += "*" + line["short_label"] + "*" + "\n"
 								final_string += "Disruption: " + disruption["label"] + "\n"
 								has_fault = False
+		if counter	== 0:
+			final_string = "*No current disruptions* :pepewow:"
 
 	except requests.exceptions.RequestException as e:
 		#return "Error: {}".format(e)
@@ -84,7 +88,7 @@ def get_ptv_status_html():
 								final_string += "Disruption: " + disruption["label"] + "<br>"
 								has_fault = False
 		if counter	== 0:
-			final_string = "*No current disruptions*"
+			final_string = "<b>No current disruptions</b>"
 
 	except requests.exceptions.RequestException as e:
 		#return "Error: {}".format(e)
