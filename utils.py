@@ -65,9 +65,9 @@ def get_ptv_status_html():
 			if line["route_type"] == 0:
 				for disruption in disruptions:
 					if disruption["display_status"] and disruption["route_ids"]:
-						counter += 1
 						for id in disruption["route_ids"]:
 							if id == line["id"]:
+								counter += 1
 								if has_fault:
 									kind = disruption["kind"]
 									if "Good" in kind:
