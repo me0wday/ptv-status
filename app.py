@@ -10,7 +10,7 @@ import requests
 @app.route('/')
 def index():
 	if (request.args.get('token') == os.environ.get('token')):
-		status = get_ptv_status()
+		status = get_ptv_status_html()
 		return status
 	else:
 		return "Error"
