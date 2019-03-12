@@ -50,7 +50,7 @@ def get_ptv_status():
 	return final_string
 
 def get_ptv_status_html():
-	final_string = "*Current status of Victorian train lines:* <br>"
+	final_string = "<b>Current status of Victorian train lines:</b> <br>"
 	try:
 		r  = requests.get("https://www.ptv.vic.gov.au/plan/disruptions/")
 		if not r.status_code // 100 == 2:
@@ -74,17 +74,17 @@ def get_ptv_status_html():
 								counter += 1
 								if has_fault:
 									kind = disruption["kind"]
-									if "Good" in kind:
-										final_string += "(yes) "
-									elif "Major" in kind:
-										final_string += "(angry) "
-									elif "Minor" in kind:
-										final_string += "(worry) "
-									elif "Part" in kind:
-										final_string += "(swear) "
-									elif "Planned Works" in kind:
-										final_string += ":construction: "
-									final_string += "*" + line["short_label"] + "*" + "<br>"
+									#if "Good" in kind:
+									#	final_string += "(yes) "
+									#elif "Major" in kind:
+									#	final_string += "(angry) "
+									#elif "Minor" in kind:
+									#	final_string += "(worry) "
+									#elif "Part" in kind:
+									#	final_string += "(swear) "
+									#elif "Planned Works" in kind:
+									#	final_string += ":construction: "
+									final_string += "<b>" + line["short_label"] + "</b>" + "<br>"
 								final_string += "Disruption: " + disruption["label"] + "<br>"
 								has_fault = False
 		if counter	== 0:
